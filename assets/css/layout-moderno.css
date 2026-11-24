@@ -1,0 +1,289 @@
+:root {
+    --azul-painel: #dceef4;
+    --azul-painel-claro: #f4fafc;
+    --azul-cabecalho: #c7e4ed;
+    --verde-acao: #048524;
+    --verde-acao-hover: #036b1d;
+    --laranja-acao: #e87918;
+    --vermelho-acao: #df4f32;
+    --texto-principal: #243b42;
+    --texto-secundario: #5b7077;
+    --borda-suave: rgba(36, 59, 66, 0.12);
+    --sombra-painel: 0 12px 32px rgba(16, 42, 50, 0.16);
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 1.25rem;
+    align-items: flex-start;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    color: var(--texto-principal);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body::before {
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+    content: "";
+    background: linear-gradient(135deg, rgba(12, 32, 39, 0.45), rgba(31, 68, 79, 0.22));
+    pointer-events: none;
+}
+
+section.container-fluid {
+    width: 100%;
+    max-width: 1920px;
+    padding: 0;
+}
+
+.box_form {
+    position: relative;
+    padding: 1.25rem 4.5rem 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 1.25rem;
+    background: rgba(220, 238, 244, 0.96);
+    box-shadow: var(--sombra-painel);
+    backdrop-filter: blur(8px);
+}
+
+.box_form > a {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: auto;
+}
+
+.btn-logoff {
+    width: 2.65rem;
+    height: 2.65rem;
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    box-shadow: 0 5px 12px rgba(103, 42, 32, 0.2);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-logoff:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(103, 42, 32, 0.28);
+}
+
+.form-filters {
+    gap: 0.65rem;
+}
+
+.form-filters > .titulo {
+    margin-bottom: 0.15rem;
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+}
+
+.filters-baixo {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.selectMotorista,
+.selectCidade,
+.selectBairro,
+.selectEstado {
+    height: 2.55rem;
+    padding: 0 0.8rem;
+    border: 1px solid var(--borda-suave);
+    border-radius: 0.65rem;
+    background: #fff;
+    color: var(--texto-principal);
+    box-shadow: 0 3px 10px rgba(30, 61, 70, 0.07);
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.selectMotorista:focus,
+.selectCidade:focus,
+.selectBairro:focus,
+.selectEstado:focus {
+    border-color: #69a9ba;
+    box-shadow: 0 0 0 3px rgba(105, 169, 186, 0.2);
+}
+
+.selectMotorista .option-placeholder,
+.selectCidade .option-placeholder,
+.selectBairro .option-placeholder,
+.selectEstado .option-placeholder {
+    color: #7b8d93;
+    font-style: italic;
+}
+
+#resultados.container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+}
+
+#resultados > .row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    margin: 0;
+}
+
+#resultados > .row > .col-sm {
+    min-width: 0;
+    margin-left: 0 !important;
+    padding: 0 0 0.75rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 1.25rem !important;
+    background: rgba(220, 238, 244, 0.97) !important;
+    box-shadow: var(--sombra-painel);
+}
+
+.card-header {
+    min-height: 4.25rem;
+    padding: 0.85rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--borda-suave);
+    background: linear-gradient(180deg, var(--azul-painel-claro), var(--azul-cabecalho));
+}
+
+.card-header .titulo,
+.card-header .tituloMot {
+    margin: 0;
+    color: var(--texto-principal);
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.25;
+}
+
+.formMassa {
+    justify-content: flex-end;
+}
+
+.btn-enviar-selecionadas,
+.btn-mot,
+.filtrarLinhaTodas {
+    border-radius: 0.55rem;
+    box-shadow: 0 3px 8px rgba(22, 61, 32, 0.18);
+    transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-enviar-selecionadas:hover:not(:disabled),
+.btn-mot:hover {
+    background-color: var(--verde-acao-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(22, 61, 32, 0.24);
+}
+
+.filtrarLinha,
+.filtrarLinhaTodas {
+    background-color: var(--laranja-acao);
+}
+
+.filtrarLinhaRet {
+    background-color: var(--vermelho-acao);
+}
+
+#resultados table {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    font-size: 0.68rem !important;
+}
+
+#resultados table thead th {
+    padding: 0.65rem 0.45rem;
+    border: 0;
+    border-bottom: 1px solid var(--borda-suave);
+    background: #edf7fa;
+    color: var(--texto-secundario);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+#resultados table td {
+    padding: 0.55rem 0.45rem;
+    border: 0;
+    border-bottom: 1px solid rgba(36, 59, 66, 0.08);
+    background: transparent !important;
+    color: var(--texto-principal);
+    vertical-align: middle;
+}
+
+#resultados table tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.36) !important;
+}
+
+#resultados table tr:hover td {
+    background: rgba(255, 255, 255, 0.72) !important;
+}
+
+.btnDetal {
+    color: #c53b2d;
+    background: rgba(255, 255, 255, 0.72);
+    font-weight: 700;
+    transition: background-color 160ms ease, color 160ms ease;
+}
+
+.btnDetal:hover {
+    color: #8d2018;
+    background: #fff;
+}
+
+.selectMotLinha,
+.selectMotTodas {
+    min-height: 1.75rem;
+    border: 1px solid var(--borda-suave);
+    border-radius: 0.45rem;
+    background: #fff;
+}
+
+@media (max-width: 1200px) {
+    body {
+        padding: 1rem;
+    }
+
+    #resultados > .row {
+        overflow-x: auto;
+    }
+
+    #resultados > .row > .col-sm {
+        flex: 0 0 31rem;
+    }
+}
+
+@media (max-width: 720px) {
+    body {
+        padding: 0.65rem;
+    }
+
+    .box_form {
+        padding: 1rem 3.5rem 1rem 1rem;
+    }
+
+    .selectMotorista,
+    .selectCidade,
+    .selectBairro,
+    .selectEstado {
+        width: 100%;
+    }
+
+    #resultados > .row > .col-sm {
+        flex-basis: 29rem;
+    }
+}
