@@ -7,6 +7,8 @@
   <title>Acesso | Databit</title>
   <link rel="stylesheet" href="../css/EstiloLogin.css">
   <link rel="stylesheet" href="../assets/css/login-moderno.css">
+  <link rel="stylesheet" href="../assets/css/carregamento.css">
+  <script src="../assets/JS/carregamento.js" defer></script>
 </head>
 <body class="login-page">
   <main class="login-shell">

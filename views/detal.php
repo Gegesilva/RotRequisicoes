@@ -49,6 +49,8 @@
       <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
       <link  rel ="folha de estilo" href ="css/bootstrap-multiselect.css" type =" text/css ">
       <link rel="stylesheet" href="../css/style.css">
+      <link rel="stylesheet" href="../assets/css/carregamento.css">
+      <script src="../assets/JS/carregamento.js" defer></script>
 
       <!-- Bootstrap core CSS -->
       <style>

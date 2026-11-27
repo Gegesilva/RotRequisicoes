@@ -38,16 +38,25 @@ if ($usuario != NULL) {
 
 
 /* SALVA O FILTRO MOTORISTA */
-$codMotSes2 = $_SESSION["codMotSes"];
+$codMotSes2 = isset($_SESSION["codMotSes"]) ? $_SESSION["codMotSes"] : '';
+$codMotRecebido = isset($_POST["codMot"]) ? $_POST["codMot"] : '';
+$origemPainel = isset($_POST["origem"]) && $_POST["origem"] === 'painel';
 
-if (isset($_POST["codMot"]) && $_POST["codMot"] != '') {
-	$_SESSION["codMotSes"] = $_POST["codMot"];
-	$cidade2 = "";
-	$bairro2 = "";
-	$estado2 = "";
+/*
+ * Ao abrir pelo painel, os filtros geograficos anteriores nao podem limitar a
+ * coluna esquerda. Somente valores enviados agora pelo painel serao aplicados.
+ */
+if ($origemPainel) {
+	$_SESSION["EstadoSes"] = '';
+	$_SESSION["CidadeSes"] = '';
+	$_SESSION["BairroSes"] = '';
 }
 
-$codMotPass = $_POST['codMot'];
+if ($codMotRecebido != '') {
+	$_SESSION["codMotSes"] = $codMotRecebido;
+}
+
+$codMotPass = $codMotRecebido;
 
 
 if (isset($codMotPass) && $codMotPass != '') {
@@ -61,13 +70,13 @@ if ($codMotPass == '1') {
 }
 
 /* SALVA O FILTRO ESTADO */
-$estadoSes2 = $_SESSION["EstadoSes"];
+$estadoSes2 = isset($_SESSION["EstadoSes"]) ? $_SESSION["EstadoSes"] : '';
 
 if (isset($_POST["Estado"]) && $_POST["Estado"] != '') {
 	$_SESSION["EstadoSes"] = $_POST["Estado"];
 }
 
-$estadoPass = $_POST['Estado'];
+$estadoPass = isset($_POST['Estado']) ? $_POST['Estado'] : '';
 
 
 if (isset($estadoPass) && $estadoPass != '') {
@@ -81,13 +90,13 @@ if (isset($estadoPass) && $estadoPass != '') {
 
 
 /* SALVA O FILTRO CIDADE */
-$cidadeSes2 = $_SESSION["CidadeSes"];
+$cidadeSes2 = isset($_SESSION["CidadeSes"]) ? $_SESSION["CidadeSes"] : '';
 
 if (isset($_POST["Cidade"]) && $_POST["Cidade"] != '') {
 	$_SESSION["CidadeSes"] = $_POST["Cidade"];
 }
 
-$cidadePass = $_POST['Cidade'];
+$cidadePass = isset($_POST['Cidade']) ? $_POST['Cidade'] : '';
 
 
 if (isset($cidadePass) && $cidadePass != '') {
@@ -100,13 +109,13 @@ if (isset($cidadePass) && $cidadePass != '') {
 
 
 /* SALVA O FILTRO BAIRRO */
-$bairroSes2 = $_SESSION["BairroSes"];
+$bairroSes2 = isset($_SESSION["BairroSes"]) ? $_SESSION["BairroSes"] : '';
 
 if (isset($_POST["Bairro"]) && $_POST["Bairro"] != '') {
 	$_SESSION["BairroSes"] = $_POST["Bairro"];
 }
 
-$bairroPass = $_POST['Bairro'];
+$bairroPass = isset($_POST['Bairro']) ? $_POST['Bairro'] : '';
 
 
 if (isset($bairroPass) && $bairroPass != '') {
@@ -125,13 +134,11 @@ $reqSelecionadas = isset($_POST['reqSelecionadas']) && is_array($_POST['reqSelec
 	? $_POST['reqSelecionadas']
 	: array();
 
-$motoristaLinha = $_POST['motoristaLinha'];
+$motoristaLinha = isset($_POST['motoristaLinha']) ? $_POST['motoristaLinha'] : '';
 
-$motoristaTdReq = $_POST['motoristaTdReq'];
+$motoristaTdReq = isset($_POST['motoristaTdReq']) ? $_POST['motoristaTdReq'] : '';
 
-$reqLinha = $_POST['reqLinha'];
-
-$filtroCidade = $_POST['FiltroCidade'];
+$reqLinha = isset($_POST['reqLinha']) ? $_POST['reqLinha'] : '';
 
 $reqLinhaRet = $_POST['reqLinhaRet'];
 
@@ -139,10 +146,10 @@ $obs = $_POST['obs'];
 
 
 /* VARIAVEIS E CONDICIONAIS DO FILTRO ESTADO */
-$estadoInput = $_POST['estadoInput'];
+$estadoInput = isset($_POST['estadoInput']) ? $_POST['estadoInput'] : '';
 $estadoPost = $estado;
 
-if (isset($estadoPost) && $estadoPost != '1') {
+if ($estadoPost !== '' && $estadoPost != '1') {
 	$estado2 = "AND TB02176_ESTADO = '$estadoPost'";
 	$estadoInput = $estadoPost;
 } else {
@@ -155,10 +162,10 @@ if (isset($estadoPost) && $estadoPost != '1') {
 
 
 /* VARIAVEIS E CONDICIONAIS DO FILTRO CIDADE */
-$cidadeInput = $_POST['cidadeInput'];
+$cidadeInput = isset($_POST['cidadeInput']) ? $_POST['cidadeInput'] : '';
 $cidadePost = $cidade;
 
-if (isset($cidadePost) && $cidadePost != '1') {
+if ($cidadePost !== '' && $cidadePost != '1') {
 	$cidade2 = "AND TB02176_CIDADE = '$cidadePost'";
 	$cidadeInput = $cidadePost;
 } else {
@@ -172,10 +179,10 @@ if (isset($cidadePost) && $cidadePost != '1') {
 
 
 /* VARIAVEIS E CONDICIONAIS DO FILTRO BAIRRO */
-$bairroInput = $_POST['bairroInput'];
+$bairroInput = isset($_POST['bairroInput']) ? $_POST['bairroInput'] : '';
 $bairroPost = $bairro;
 
-if (isset($bairroPost) && $bairroPost != '1') {
+if ($bairroPost !== '' && $bairroPost != '1') {
 	$bairro2 = "AND TB02176_BAIRRO = '$bairroPost'";
 	$bairroInput = $bairroPost;
 } else {
@@ -187,24 +194,6 @@ if (isset($bairroPost) && $bairroPost != '1') {
 }
 
 
-
-
-/* CONDICIONAIS PARA BOTÃO EM MASSA */
-$cidadeBotao = $_POST['cidadeBotao'];
-$bairroBotao = $_POST['bairroBotao'];
-
-if (isset($cidadeInput) && isset($filtroCidade)) {
-	$btnEnvTodos = "<input type='submit' form='formTodos' class='btn btn-warning' value='Enviar Todos'/>";
-
-	if ($bairroBotao != 1) {
-
-		$bairro2;
-		/* $estado2; */
-	}
-
-} else {
-	$btnEnvTodos = "";
-}
 
 
 /* PEGA NOME MOTORISTA */
@@ -224,13 +213,6 @@ if (isset($codMot)) {
 }
 
 
-/* LIMPAR BOTÃO ENV TODOS */
-if (isset($_POST["codMot"]) && $_POST["codMot"] != '') {
-
-	$btnEnvTodos = "";
-}
-
-
 /* ENVIA REQ PARA O MOTORISTA */
 if (count($reqSelecionadas) > 0) {
 	enviarRequisicoesSelecionadas($conn, $reqSelecionadas, $codMot, $login, $nomeMot, $StatusComMot);
@@ -242,15 +224,15 @@ if (count($reqSelecionadas) > 0) {
 
 
 /* CONDICIONAIS MUDA MOTORISTA EM LINHA */
-if (isset($motoristaLinha)) {
-	mudaMotLinha($conn, $motoristaLinha, $login, $reqLinha);
+if ($motoristaLinha !== '' && $reqLinha !== '') {
+	mudaMotLinha($conn, $motoristaLinha, $login, $reqLinha, $codMot, $StatusComMot, $SituacaoMotoristaAtivo);
 }
 
 
 
 /* CONDICIONAIS MUDA TODAS OS DE UM MOTORISTA PARA OUTRO MOTORISTA */
-if (isset($motoristaTdReq)) {
-	mudaTdReqMot($conn, $motoristaTdReq, $login, $codMot);
+if ($motoristaTdReq !== '') {
+	mudaTdReqMot($conn, $motoristaTdReq, $login, $codMot, $StatusComMot, $SituacaoMotoristaAtivo);
 }
 
 
@@ -263,10 +245,6 @@ if (isset($reqLinhaRet)) {
 
 
 
-/* UPDATE EM MASSA POR CIDADE/BAIRRO */
-if ($cidadeBotao != NULL && $cidadeBotao != "") {
-	mudaMassaCidade($conn, $cidadeBotao, $StatusAguardMot, $bairro2, $codMot, $login, $nomeMot, $StatusComMot);
-}
 ?>
 
 <!DOCTYPE html>
@@ -289,16 +267,18 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 	<link rel="stylesheet" href="../css/style.css">
 	<link rel="stylesheet" href="../assets/css/requisicoes.css">
 	<link rel="stylesheet" href="../assets/css/layout-moderno.css">
+	<link rel="stylesheet" href="../assets/css/carregamento.css">
 
 	<script src="../js/jQuery/jquery-3.5.1.min.js"></script>
 	<script src="../js/script.js"></script>
 	<script src="../assets/JS/requisicoes.js" defer></script>
+	<script src="../assets/JS/carregamento.js" defer></script>
 </head>
 
 <body>
 	<section class="container-fluid">
 		<div class="box_form">
-			<a href="login.php"><button class="btn-logoff" title="Sair"></button></a>
+			<a class="btn-voltar-painel" href="painel.php" title="Voltar ao painel">← Motoristas</a>
 
 			<?php /*  echo "<h1  class='titulo'><b>$codTecSes2</b></h1>"; */ ?>
 			<form id="form-filters" class="form-filters" method='post' action="index.php">
@@ -340,9 +320,6 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 									<?php echo "<input type='hidden' name='cidadeSes' id='cidadeSes' value='$cidadeSes'/>"; ?>
 									<?php echo "<input type='hidden' name='bairroSes' id='bairroSes' value='$bairroSes'/>"; ?>
 									<?php /* echo "<input type='hidden' name='codTec' id='codTec' value='$codTec'/>"; */ ?>
-									<input type='hidden' name='FiltroEstado' id='FiltroEstado' value='1' />
-									<input type='hidden' name='FiltroCidade' id='FiltroCidade' value='1' />
-									<input type='hidden' name='FiltroBairro' id='FiltroBairro' value='1' />
 									<!-- <input type="submit" class='btn-tec' value="BUSCAR"> -->
 					</div>
 			</form>
@@ -374,18 +351,6 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 								<button type="submit" id="btnEnviarSelecionadas" class="btn-enviar-selecionadas" disabled>
 									Enviar selecionadas (<span id="totalRequisicoesSelecionadas">0</span>)
 								</button>
-							</form>
-							<form id="formTodos" name="formTodos" action="index.php"
-								method="post">
-								<?php echo "<input name='estadoBotao' type='hidden' value='$estadoInput'/>"; ?>
-								<?php echo "<input name='cidadeBotao' type='hidden' value='$cidadeInput'/>"; ?>
-								<?php echo "<input name='bairroBotao' type='hidden' value='$bairroInput'/>"; ?>
-								<?php echo "<input type='hidden' name='nomeMot' id='nomeMot' value='$nomeMot'/>"; ?>
-								<?php echo "<input type='hidden' name='codMot' id='codMot' value='$codMot'/>"; ?>
-								<?php echo "<input  type='hidden' id='estadoInput' name='estadoInput' value = '$estadoInput'>"; ?>
-								<?php echo "<input  type='hidden' id='cidadeInput' name='cidadeInput' value = '$cidadeInput'>"; ?>
-								<?php echo "<input  type='hidden' id='bairroInput' name='bairroInput' value = '$bairroInput'>"; ?>
-								<?php echo $btnEnvTodos; ?>
 							</form>
 						</div>
 					</div>
@@ -520,14 +485,16 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 								ORDER BY TB01077_NOME
 							";
 
-						$tabelaMot .= "<form action='index.php' method='post'>
-						<select class='selectMotTodas' id='motoristaTdReq' name='motoristaTdReq'>
-							<option disabled selected>Mot</option>";
+						$tabelaMot .= "<form id='formTransferirTodas' class='form-transferir-todas' action='index.php' method='post' onsubmit=\"return window.confirm('Transferir todas as requisições deste motorista?');\">
+						<select class='selectMotTodas' id='motoristaTdReq' name='motoristaTdReq' required>
+							<option value='' disabled selected>Motorista</option>";
 						$stmt1 = sqlsrv_query($conn, $sql1);
 
 						while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 
-							$tabelaMot .= "<option id='motoristaTdReq' name='motoristaTdReq' value='$row1[CodMot]'>$row1[NomeMot]</option>";
+							if ((string) $row1['CodMot'] !== (string) $codMot) {
+								$tabelaMot .= "<option value='$row1[CodMot]'>$row1[NomeMot]</option>";
+							}
 
 						}
 
@@ -537,10 +504,7 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 						<input  type='hidden' id='estadoInput' name='estadoInput' value = '$estadoInput'>
 						<input  type='hidden' id='cidadeInput' name='cidadeInput' value = '$cidadeInput'>
 						<input  type='hidden' id='bairroInput' name='bairroInput' value = '$bairroInput'>
-					</td>
-					<td>
 						<input type='submit' value='ENVIAR TODAS' class='filtrarLinhaTodas'>
-					</td>
 					</form>";
 
 						print ($tabelaMot);
@@ -641,14 +605,17 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 									ORDER BY TB01077_NOME	
 								";
 
-							$tabela .= "<form action='index.php' method='post'>
-									<select class='selectMotLinha' id='motoristaLinha' name='motoristaLinha'>
-										<option disabled selected>Mot</option>";
+							$idFormularioMotorista = "formMotoristaLinha$cont1";
+							$tabela .= "<form id='$idFormularioMotorista' action='index.php' method='post'>
+									<select class='selectMotLinha' name='motoristaLinha' required>
+										<option value='' disabled selected>Motorista</option>";
 							$stmt1 = sqlsrv_query($conn, $sql1);
 
 							while ($row1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 
-								$tabela .= "<option id='motoristaLinha' name='motoristaLinha' value='$row1[CodMot]'>$row1[NomeMot]</option>";
+								if ((string) $row1['CodMot'] !== (string) $codMot) {
+									$tabela .= "<option value='$row1[CodMot]'>$row1[NomeMot]</option>";
+								}
 
 							}
 
@@ -658,12 +625,12 @@ if ($cidadeBotao != NULL && $cidadeBotao != "") {
 									<input  type='hidden' id='estadoInput' name='estadoInput' value = '$estadoInput'>
 									<input  type='hidden' id='cidadeInput' name='cidadeInput' value = '$cidadeInput'>
 									<input  type='hidden' id='bairroInput' name='bairroInput' value = '$bairroInput'>
-									<input  type='hidden' id='reqLinha' name='reqLinha' value = '$row[req]'>
+									<input  type='hidden' name='reqLinha' value = '$row[req]'>
+								</form>
 						        </td>
 						    	<td>
-									<input type='submit' value='ENVIAR' class='filtrarLinha'>
-								</td>
-						        </form>";
+									<input type='submit' form='$idFormularioMotorista' value='ENVIAR' class='filtrarLinha'>
+								</td>";
 
 							$tabela .= "<td>
 										<form action='index.php' method='post'>

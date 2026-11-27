@@ -100,32 +100,74 @@ INSERT INTO
     $stmt = sqlsrv_query($conn, $sql6);
 }
 
-function mudaMotLinha($conn, $motoristaLinha, $login, $reqLinha)
+function mudaMotLinha($conn, $motoristaLinha, $login, $reqLinha, $codMot, $StatusComMot, $SituacaoMotoristaAtivo)
 {
-    $sql7 = "UPDATE 
-				TB02096
-			SET 
-				TB02096_CODMOTO = '$motoristaLinha',
-				TB02096_DTSAIDA = GETDATE(),
-				TB02096_CONFERIDO = '$login'
-			WHERE
-				TB02096_CODIGO = '$reqLinha'
-			";
-    $stmt = sqlsrv_query($conn, $sql7);
+    if ($motoristaLinha === '' || $motoristaLinha === $codMot || $reqLinha === '') {
+        return false;
+    }
+
+    $sql7 = "UPDATE TB02096
+                SET TB02096_CODMOTO = ?,
+                    TB02096_MOTORISTA = (SELECT TOP 1 TB01077_NOME FROM TB01077 WHERE TB01077_CODIGO = ?),
+                    TB02096_DTSAIDA = GETDATE(),
+                    TB02096_CONFERIDO = ?
+              WHERE TB02096_CODIGO = ?
+                AND TB02096_CODMOTO = ?
+                AND EXISTS (
+                    SELECT 1 FROM TB02021
+                    WHERE TB02021_CODIGO = TB02096.TB02096_CODIGO
+                      AND TB02021_STATUS = ?
+                )
+                AND EXISTS (
+                    SELECT 1 FROM TB01077
+                    WHERE TB01077_CODIGO = ?
+                      AND TB01077_SITUACAO = ?
+                )";
+
+    return sqlsrv_query($conn, $sql7, array(
+        $motoristaLinha,
+        $motoristaLinha,
+        $login,
+        $reqLinha,
+        $codMot,
+        $StatusComMot,
+        $motoristaLinha,
+        $SituacaoMotoristaAtivo
+    ));
 }
 
-function mudaTdReqMot($conn, $motoristaTdReq, $login, $codMot)
+function mudaTdReqMot($conn, $motoristaTdReq, $login, $codMot, $StatusComMot, $SituacaoMotoristaAtivo)
 {
-    $sql8 = "UPDATE 
-				TB02096 
-			SET 
-				TB02096_CODMOTO = '$motoristaTdReq',
-				TB02096_DTSAIDA = GETDATE(),
-				TB02096_CONFERIDO = '$login'
-			WHERE
-				TB02096_CODMOTO = '$codMot'
-			";
-    $stmt = sqlsrv_query($conn, $sql8);
+    if ($motoristaTdReq === '' || $motoristaTdReq === $codMot || $codMot === '') {
+        return false;
+    }
+
+    $sql8 = "UPDATE TB02096
+                SET TB02096_CODMOTO = ?,
+                    TB02096_MOTORISTA = (SELECT TOP 1 TB01077_NOME FROM TB01077 WHERE TB01077_CODIGO = ?),
+                    TB02096_DTSAIDA = GETDATE(),
+                    TB02096_CONFERIDO = ?
+              WHERE TB02096_CODMOTO = ?
+                AND EXISTS (
+                    SELECT 1 FROM TB02021
+                    WHERE TB02021_CODIGO = TB02096.TB02096_CODIGO
+                      AND TB02021_STATUS = ?
+                )
+                AND EXISTS (
+                    SELECT 1 FROM TB01077
+                    WHERE TB01077_CODIGO = ?
+                      AND TB01077_SITUACAO = ?
+                )";
+
+    return sqlsrv_query($conn, $sql8, array(
+        $motoristaTdReq,
+        $motoristaTdReq,
+        $login,
+        $codMot,
+        $StatusComMot,
+        $motoristaTdReq,
+        $SituacaoMotoristaAtivo
+    ));
 }
 
 function devolveRot($conn, $obs, $CodMotGeral, $login, $reqLinhaRet, $StatusRot, $nomeMot, $codMot)
@@ -193,7 +235,7 @@ function devolveRot($conn, $obs, $CodMotGeral, $login, $reqLinhaRet, $StatusRot,
 
 function mudaMassaCidade($conn, $cidadeBotao, $StatusAguardMot, $bairro2, $codMot, $login, $nomeMot, $StatusComMot)
 {
-    global $TipoRequisicao, $ObservacaoRoteirizacao, $CodTecnicoHistoricoMassa;
+    global $TipoRequisicao, $ObservacaoRoteirizacao;
 
     $sql9 = "DECLARE @CODIGO VARCHAR(6);
 	
@@ -260,7 +302,7 @@ function mudaMassaCidade($conn, $cidadeBotao, $StatusAguardMot, $bairro2, $codMo
 							TB02021_CODCLI,
 							TB02021_CODEMP,
 							(SELECT TB01021_NOME FROM TB01021 WHERE TB01021_CODIGO = '$StatusComMot'),
-							'$CodTecnicoHistoricoMassa'
+							'$codMot'
 							FROM TB02021
 							LEFT JOIN TB01077 ON TB01077_CODIGO = '$codMot'
 							LEFT JOIN TB02176 ON TB02176_CODIGO = TB02021_CODSITE
@@ -320,7 +362,7 @@ function mudaMassaCidade($conn, $cidadeBotao, $StatusAguardMot, $bairro2, $codMo
 							TB02021_CODCLI,
 							TB02021_CODEMP,
 							(SELECT TB01021_NOME FROM TB01021 WHERE TB01021_CODIGO = '$StatusComMot'),
-							'$CodTecnicoHistoricoMassa'
+							'$codMot'
 							FROM TB02021
 							LEFT JOIN TB01077 ON TB01077_CODIGO = '$codMot'
 							LEFT JOIN TB02176 ON TB02176_CODIGO = TB02021_CODSITE

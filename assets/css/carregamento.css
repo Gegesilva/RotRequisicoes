@@ -1,0 +1,35 @@
+.carregamento-global {
+    position: fixed;
+    z-index: 99999;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(16, 45, 54, .48);
+    backdrop-filter: blur(2px);
+}
+
+.carregamento-global.ativo { display: flex; }
+
+.carregamento-conteudo {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .85rem 1rem;
+    border-radius: .75rem;
+    background: #fff;
+    color: #244b57;
+    font: 700 .78rem "Segoe UI", Arial, sans-serif;
+    box-shadow: 0 14px 40px rgba(10, 36, 44, .25);
+}
+
+.carregamento-spinner {
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 3px solid #c7e4ed;
+    border-top-color: #048524;
+    border-radius: 50%;
+    animation: carregamento-girar .7s linear infinite;
+}
+
+@keyframes carregamento-girar { to { transform: rotate(360deg); } }

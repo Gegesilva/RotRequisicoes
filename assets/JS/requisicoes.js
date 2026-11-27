@@ -5,6 +5,9 @@
         var resultados = document.getElementById('resultados');
         atualizacaoEmAndamento = ativo;
 
+        if (ativo && window.mostrarCarregamento) window.mostrarCarregamento();
+        if (!ativo && window.ocultarCarregamento) window.ocultarCarregamento();
+
         if (resultados) {
             resultados.classList.toggle('resultados-carregando', ativo);
             resultados.setAttribute('aria-busy', ativo ? 'true' : 'false');

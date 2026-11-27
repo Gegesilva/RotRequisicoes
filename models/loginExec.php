@@ -30,7 +30,7 @@ $_SESSION["password"]=$senha;
     
     if($usuario != NULL){
         
-        echo "<script>location.href='../views/index.php'</script>";
+        echo "<script>location.href='../views/painel.php'</script>";
 
     } else{
         echo"<script>window.alert('Usuario e/ou senha invalidos!')</script>";

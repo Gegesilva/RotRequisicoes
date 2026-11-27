@@ -1,0 +1,41 @@
+:root { --azul-painel:#dceef4; --azul-claro:#f4fafc; --azul-medio:#c7e4ed; --azul-escuro:#244b57; --verde:#048524; --laranja:#e87918; --vermelho:#c84b3a; --texto:#243b42; --texto-suave:#667b82; --borda:rgba(36,59,66,.12); --sombra:0 14px 34px rgba(10,36,44,.16); }
+* { box-sizing:border-box; }
+body { min-height:100vh; margin:0; padding:1rem 1.5rem; background:#163943 url("../../media/databitoriginal-escura.jpg") center/cover fixed; color:var(--texto); font-family:"Segoe UI",Arial,sans-serif; }
+body::before { position:fixed; z-index:-1; inset:0; content:""; background:rgba(12,36,44,.28); }
+.painel-shell { width:min(1600px,100%); margin:0 auto; }
+.painel-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.65rem 1rem; border:1px solid rgba(255,255,255,.55); border-radius:.9rem; background:rgba(220,238,244,.96); box-shadow:var(--sombra); }
+.painel-identidade { display:flex; align-items:center; gap:.85rem; }
+.painel-identidade img { width:5.4rem; padding:.3rem; border-radius:.5rem; background:#fff; }
+.painel-eyebrow { color:var(--verde); font-size:.58rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+.painel-header h1 { margin:.12rem 0 0; color:var(--azul-escuro); font-size:clamp(1rem,2vw,1.35rem); }
+.btn-logout { display:inline-flex; align-items:center; gap:.4rem; padding:.45rem .6rem .45rem .75rem; border-radius:.55rem; background:#fff; color:var(--vermelho); font-size:.7rem; font-weight:700; text-decoration:none; box-shadow:0 5px 14px rgba(62,35,30,.12); }
+.btn-logout img { width:1.1rem; height:1.1rem; object-fit:contain; }
+.filtros-card { margin-top:.75rem; padding:.8rem; border-radius:.85rem; background:rgba(220,238,244,.96); box-shadow:var(--sombra); }
+.painel-filtros { display:grid; grid-template-columns:repeat(4,minmax(9rem,1fr)) auto; align-items:end; gap:.65rem; }
+.painel-filtros label { color:var(--texto-suave); font-size:.72rem; font-weight:700; }
+.painel-filtros select { width:100%; height:2.55rem; margin-top:.35rem; padding:0 .75rem; border:1px solid var(--borda); border-radius:.6rem; background:#fff; color:var(--texto); }
+.filtros-acoes { display:flex; align-items:center; gap:.55rem; }
+.filtros-acoes button,.filtros-acoes a { min-height:2.55rem; padding:.7rem .85rem; border:0; border-radius:.6rem; font-size:.76rem; font-weight:700; text-decoration:none; cursor:pointer; }
+.filtros-acoes button { background:var(--verde); color:#fff; } .filtros-acoes a { background:#fff; color:var(--texto-suave); }
+.motoristas-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1rem; }
+.motorista-form { min-width:0; margin:0; }
+.motorista-card { display:flex; width:100%; min-width:0; height:100%; padding:0; flex-direction:column; overflow:hidden; border:1px solid rgba(255,255,255,.6); border-radius:1rem; background:rgba(244,250,252,.98); color:inherit; font:inherit; text-align:left; cursor:pointer; box-shadow:var(--sombra); transition:transform 160ms ease,box-shadow 160ms ease; }
+.motorista-card:hover { transform:translateY(-3px); box-shadow:0 18px 42px rgba(10,36,44,.22); }
+.motorista-card-header { display:flex; justify-content:space-between; gap:.75rem; padding:1rem; background:linear-gradient(180deg,var(--azul-claro),var(--azul-medio)); }
+.motorista-codigo { color:var(--texto-suave); font-size:.66rem; font-weight:700; text-transform:uppercase; }
+.motorista-card h2 { margin:.2rem 0 0; color:var(--azul-escuro); font-size:1rem; }
+.abrir-painel { align-self:center; color:var(--verde); font-size:.7rem; font-weight:800; white-space:nowrap; }
+.motorista-indicadores { display:grid; grid-template-columns:1fr; border-bottom:1px solid var(--borda); }
+.motorista-indicadores span { padding:.65rem .35rem; color:var(--texto-suave); font-size:.65rem; text-align:center; }
+.motorista-indicadores strong { display:block; color:var(--azul-escuro); font-size:1rem; }
+.motorista-indicadores .indicador-verde strong { color:var(--verde); } .motorista-indicadores .indicador-laranja strong { color:var(--laranja); }
+.requisicoes-lista { max-height:24rem; overflow-y:auto; }
+.requisicao-item { padding:.75rem .9rem; border-bottom:1px solid rgba(36,59,66,.08); background:#fff; }
+.requisicao-item:nth-child(even) { background:#f5f9fa; } .requisicao-item.requisicao-pendente { border-left:3px solid var(--laranja); }
+.requisicao-linha-principal,.requisicao-meta { display:flex; justify-content:space-between; gap:.5rem; }
+.requisicao-linha-principal strong { color:#c53b2d; font-size:.78rem; } .requisicao-linha-principal span { color:var(--texto-suave); font-size:.67rem; }
+.requisicao-cliente { margin:.35rem 0; overflow:hidden; font-size:.78rem; font-weight:650; text-overflow:ellipsis; white-space:nowrap; }
+.requisicao-meta,.requisicao-local { color:var(--texto-suave); font-size:.66rem; } .requisicao-local { margin-top:.25rem; }
+.estado-vazio { margin-top:1rem; padding:3rem 1rem; border-radius:1rem; background:rgba(244,250,252,.96); color:var(--texto-suave); text-align:center; box-shadow:var(--sombra); }
+@media (max-width:1150px) { .painel-filtros { grid-template-columns:repeat(2,1fr); } .motoristas-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:720px) { body { padding:.7rem; } .painel-header { align-items:center; } .painel-identidade img { width:4.5rem; } .btn-logout span { display:none; } .painel-filtros,.motoristas-grid { grid-template-columns:1fr; } .filtros-acoes { grid-column:1; } }
